@@ -16,17 +16,24 @@ import org.hamcrest.Matcher;
 import org.subethamail.wiser.Wiser;
 import org.subethamail.wiser.WiserMessage;
 
-public final class WiserMatcher extends BaseMatcher<Wiser> {
+public final class WiserMatcher implements Matcher<Wiser> {
     
     @Override
     public boolean matches(Object item) {
         long startTime = System.currentTimeMillis();
         Wiser wiser = (Wiser) item;
         while (!testResult && ! isTimeOut) {            
-            testResult = wiser.getMessages().stream().parallel()
-                    .filter(m -> m.getEnvelopeReceiver().equals(recipient))
-                    .findAny()
-                    .isPresent();
+            for (WiserMessage m : wiser.getMessages()) {
+                try {
+                    if(m.getEnvelopeReceiver().equals(recipient) && m.getMimeMessage().getContent().equals(bodyText)){
+                        testResult = true;
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(WiserMatcher.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (MessagingException ex) {
+                    Logger.getLogger(WiserMatcher.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
             isTimeOut = (System.currentTimeMillis() - startTime) > timeout *1000;
         }
         return testResult;
@@ -69,9 +76,6 @@ public final class WiserMatcher extends BaseMatcher<Wiser> {
         
         description.appendText(wiserMessage.toString());
         log.info("Wiser Message: " + wiserMessage.toString());
-
-                   
-        
         
     }
     
@@ -107,6 +111,10 @@ public final class WiserMatcher extends BaseMatcher<Wiser> {
                         + " Body: "
                         + bodyText;
     }
+    
+    @Deprecated
+    @Override
+    public void _dont_implement_Matcher___instead_extend_BaseMatcher_() {}
     
 
 }

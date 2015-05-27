@@ -30,7 +30,7 @@ public class MailSenderTest {
 
     @Test
     public void mailSenderTest() {
-        assertThat(wiser, WiserMatcher.hasSent("aadddd", "aa", 10));
+        assertThat(wiser, WiserMatcher.hasSent("aa", "aa", 100));
     
     }
 }

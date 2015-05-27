@@ -38,7 +38,7 @@ public class MailSender {
             @Override
             public void run() {
                 try {
-                    Thread.currentThread().sleep(0 *1000);
+                    Thread.currentThread().sleep(1 *1000);
                     // Create a default MimeMessage object.
                     MimeMessage message = new MimeMessage(session);
 
