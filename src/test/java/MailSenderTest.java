@@ -20,7 +20,6 @@ public class MailSenderTest {
         wiser.setHostname("localhost");
         wiser.start();
         
-        MailSender.send("aa", "aa");
     }
     
     @After
@@ -30,7 +29,7 @@ public class MailSenderTest {
 
     @Test
     public void mailSenderTest() {
-        assertThat(wiser, WiserMatcher.hasSent("aa", "aa", 100));
-    
+        MailSender.send("aa", "aa");
+        assertThat(wiser, WiserMatcher.hasSent("aa", "aaa", 10));    
     }
 }

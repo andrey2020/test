@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 import javax.mail.MessagingException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Factory;
 import org.hamcrest.Matcher;
@@ -18,6 +17,13 @@ import org.subethamail.wiser.WiserMessage;
 
 public final class WiserMatcher implements Matcher<Wiser> {
     
+    /**
+    * For any timeout ensures one run through the list (wiser.getMessages()).
+    *
+    * @param item the Wiser Object
+    * @return true if message with Recipient and Body is in wiser.getMessages()
+    *
+    */    
     @Override
     public boolean matches(Object item) {
         long startTime = System.currentTimeMillis();
@@ -48,14 +54,15 @@ public final class WiserMatcher implements Matcher<Wiser> {
     @Override
     public void describeMismatch(Object item, Description description) {
         Wiser wiser = (Wiser)item;
-        StringBuilder wiserMessage = new StringBuilder();
+        StringBuilder wiserMessages = new StringBuilder();
         description.appendText("Wiser have: ");
         
+        wiserMessages.append(wiser.getMessages().size()).append(" messages. \n");
         
         for (WiserMessage m : wiser.getMessages()) {
             try {
                 
-                wiserMessage.append("Recipient: ")
+                wiserMessages.append("Recipient: ")
                         .append("\"")
                         .append(m.getEnvelopeReceiver())
                         .append("\"")
@@ -74,8 +81,10 @@ public final class WiserMatcher implements Matcher<Wiser> {
             
         }
         
-        description.appendText(wiserMessage.toString());
-        log.info("Wiser Message: " + wiserMessage.toString());
+        if(isTimeOut) wiserMessages.append("Exit on timeout.");
+        
+        description.appendText(wiserMessages.toString());
+        log.info("Wiser have: " + wiserMessages.toString());
         
     }
     
