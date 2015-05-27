@@ -1,5 +1,4 @@
 import de.mackevision.sendmailtester.MailSender;
-import org.hamcrest.TypeSafeMatcher;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +11,6 @@ import org.subethamail.wiser.Wiser;
  */
 public class MailSenderTest {
     private Wiser wiser;
-    TypeSafeMatcher f;
     @Before
     public void setUp() {
         wiser = new Wiser();
@@ -30,6 +28,6 @@ public class MailSenderTest {
     @Test
     public void mailSenderTest() {
         MailSender.send("aa", "aa");
-        assertThat(wiser, WiserMatcher.hasSent("aa", "aaa", 10));    
+        assertThat(wiser, WiserMatcher.wiserMatcher("aa", "aa", 10));    
     }
 }

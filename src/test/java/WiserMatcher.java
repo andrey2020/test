@@ -86,16 +86,15 @@ public final class WiserMatcher implements Matcher<Wiser> {
         description.appendText(wiserMessages.toString());
         log.info("Wiser have: " + wiserMessages.toString());
         
-    }
-    
+    }    
 
     @Factory
-    public static <T> Matcher<Wiser> hasSent(String recipient, String bodyText, int timeout) {
+    public static <T> Matcher<Wiser> wiserMatcher(String recipient, String bodyText, int timeout) {
       return new WiserMatcher(recipient, bodyText, timeout);
     }
     
     @Factory
-    public static <T> Matcher<Wiser> hasSent(String recipient, String bodyText) {
+    public static <T> Matcher<Wiser> wiserMatcher(String recipient, String bodyText) {
       return new WiserMatcher(recipient, bodyText, 3);
     }
     
